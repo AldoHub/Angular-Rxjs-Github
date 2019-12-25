@@ -1,0 +1,46 @@
+
+<label>
+    <span>Repository name:</span>
+
+    <input type="text" [ngModel]="''" (ngModelChange)="searchRepos($event)"/>
+</label>
+
+
+<div class="repos">
+    <div *ngIf="(repositories$ | async) as repositories">
+        <h2>Repositories</h2>
+
+        <ng-container [ngSwitch]="repositories.length">
+            <ng-container *ngSwitchCase="0">
+                No results found
+            </ng-container>
+
+            <div class="details" *ngSwitchDefault>
+                <div>
+                    <!-- REPOS LIST -->
+                    <div
+                        *ngFor="let repository of repositories"
+                        (mouseenter)="onRepositoryMouseEvent(repository)"
+                        (mouseleave)="onRepositoryMouseEvent(undefined)"
+                    >
+                        {{ repository.name }}
+                    </div>
+                </div>
+
+                <div>
+                    <!-- OWNER -->
+                    <div *ngIf="(selectedRepository$ | async) as selectedRepository">
+                        <h4>{{ selectedRepository.owner.login }}</h4>
+
+                        <img [attr.src]="selectedRepository.owner.avatar_url"
+                             width="200"
+                             height="auto"
+                             alt="avatar"
+                        />
+                    </div>
+
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>
